@@ -128,7 +128,7 @@ namespace Anamel.BL.Services
                 issuer: _configuration["JWT:ValidIssuer"],
                 audience: _configuration["JWT:ValidAudience"],
                 claims: claims,
-                expires: DateTime.Now.AddDays(1),
+                expires: DateTime.Now.AddDays(7),
                 signingCredentials: creds
             );
 

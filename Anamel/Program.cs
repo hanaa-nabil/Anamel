@@ -1,7 +1,10 @@
-
 using Anamel.Api.Extensions;
 using Anamel.Api.Middleware;
+using Anamel.BL.Services;
+using Anamel.Core.Interfaces.IServices;
+using Anamel.Core.IRepositories;
 using Anamel.DL;
+using Anamel.DL.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
@@ -20,12 +23,17 @@ namespace Anamel
 
                 // Configure database
                 builder.Services.ConfigureDatabase(builder.Configuration);
-
                 // Configure Identity
                 builder.Services.ConfigureIdentity();
 
                 // Configure JWT
                 builder.Services.ConfigureJWT(builder.Configuration);
+
+                // Register Repositories
+                builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+
+                // Register Services
+                builder.Services.AddScoped<ICategoryService, CategoryService>();
 
                 // Configure CORS
                 builder.Services.ConfigureCors();
@@ -70,19 +78,19 @@ namespace Anamel
                     });
 
                     c.AddSecurityRequirement(new OpenApiSecurityRequirement
-            {
-                {
-                    new OpenApiSecurityScheme
                     {
-                        Reference = new OpenApiReference
                         {
-                            Type = ReferenceType.SecurityScheme,
-                            Id = "Bearer"
+                            new OpenApiSecurityScheme
+                            {
+                                Reference = new OpenApiReference
+                                {
+                                    Type = ReferenceType.SecurityScheme,
+                                    Id = "Bearer"
+                                }
+                            },
+                            Array.Empty<string>()
                         }
-                    },
-                    Array.Empty<string>()
-                }
-            });
+                    });
                 });
 
                 builder.Services.AddLogging();
@@ -128,7 +136,8 @@ namespace Anamel
                         logger.LogError(ex, "An error occurred during database initialization. The app will start anyway.");
                     }
                 }
-
+                app.UseDeveloperExceptionPage();
+                //app.UseMiddleware<GlobalExceptionMiddleware>();
                 app.UseSwagger();
                 app.UseSwaggerUI(c =>
                 {
@@ -157,6 +166,5 @@ namespace Anamel
                 throw;
             }
         }
-
     }
 }

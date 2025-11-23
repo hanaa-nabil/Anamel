@@ -34,14 +34,53 @@ namespace Anamel.Api.Controllers
             try
             {
                 var product = await _productService.CreateProductAsync(createProductDto);
-                return CreatedAtRoute("GetProductById", new { controller = "Products", id = product.Id }, product);
+                return Created($"/api/Products/{product.Id}", product);
             }
             catch (ArgumentException ex)
             {
                 return BadRequest(new { message = ex.Message });
             }
         }
+        /// <summary>
+        /// Create multiple products at once
+        /// </summary>
+        [HttpPost("products/bulk")]
+        public async Task<IActionResult> CreateProducts([FromBody] List<CreateProductDto> createProductDtos)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
 
+            try
+            {
+                var createdProducts = new List<ProductDto>();
+                var errors = new List<string>();
+
+                foreach (var dto in createProductDtos)
+                {
+                    try
+                    {
+                        var product = await _productService.CreateProductAsync(dto);
+                        createdProducts.Add(product);
+                    }
+                    catch (Exception ex)
+                    {
+                        errors.Add($"Failed to create product '{dto.Name}': {ex.Message}");
+                    }
+                }
+
+                return Ok(new
+                {
+                    successCount = createdProducts.Count,
+                    failureCount = errors.Count,
+                    products = createdProducts,
+                    errors = errors
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
 
         /// <summary>
         /// Update product
