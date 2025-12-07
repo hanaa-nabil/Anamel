@@ -16,5 +16,6 @@ namespace Anamel.Core.DTOs.Product
         public string ImageUrl { get; set; }
         public string CategoryName { get; set; }
         public int CategoryId { get; set; }
+        public int Rate { get; set; }
     }
 }

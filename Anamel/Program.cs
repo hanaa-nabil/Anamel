@@ -3,6 +3,7 @@ using Anamel.Api.Middleware;
 using Anamel.BL.Services;
 using Anamel.Core.Interfaces.IServices;
 using Anamel.Core.IRepositories;
+using Anamel.Core.IRepositories.Services;
 using Anamel.DL;
 using Anamel.DL.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -31,10 +32,9 @@ namespace Anamel
 
                 // Register Repositories
                 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
-
-                // Register Services
                 builder.Services.AddScoped<ICategoryService, CategoryService>();
-
+                builder.Services.AddScoped<IAuthService, AuthService>();
+                builder.Services.AddScoped<IEmailService, EmailService>();
                 // Configure CORS
                 builder.Services.ConfigureCors();
 
@@ -63,7 +63,7 @@ namespace Anamel
                         Contact = new OpenApiContact
                         {
                             Name = "Development Team",
-                            Email = "dev@ecommerce.com"
+                            Email = "hanaanabilzedan@gmail.com"
                         }
                     });
 
@@ -97,7 +97,6 @@ namespace Anamel
 
                 var app = builder.Build();
 
-                // Make migration optional and don't let it crash the app
                 using (var scope = app.Services.CreateScope())
                 {
                     var services = scope.ServiceProvider;

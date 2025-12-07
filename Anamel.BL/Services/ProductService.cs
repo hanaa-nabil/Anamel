@@ -58,7 +58,8 @@ namespace Anamel.BL.Services
                 StockQuantity = createProductDto.StockQuantity,
                 CategoryId = createProductDto.CategoryId,
                 ImageUrl = createProductDto.ImageUrl,
-                IsActive = true
+                IsActive = true,
+                Rate = createProductDto.Rate
             };
 
             await _unitOfWork.Products.AddAsync(product);
@@ -85,6 +86,7 @@ namespace Anamel.BL.Services
             product.StockQuantity = updateProductDto.StockQuantity;
             product.CategoryId = updateProductDto.CategoryId;
             product.ImageUrl = updateProductDto.ImageUrl;
+            product.Rate = updateProductDto.Rate;
 
             _unitOfWork.Products.Update(product);
             await _unitOfWork.SaveChangesAsync();
@@ -118,7 +120,8 @@ namespace Anamel.BL.Services
                 StockQuantity = product.StockQuantity,
                 ImageUrl = product.ImageUrl,
                 CategoryId = product.CategoryId,
-                CategoryName = product.Category?.Name
+                CategoryName = product.Category?.Name,
+                Rate = product.Rate
             };
         }
 

@@ -16,5 +16,10 @@ namespace Anamel.Core.Entities
 
         // Navigation properties
         public virtual ICollection<Cart> Carts { get; set; } = new List<Cart>();
+        public string? Otp { get; set; }
+        public DateTime? OtpExpiryTime { get; set; }
+        public int OtpAttempts { get; set; }
+        public bool IsOtpVerified { get; set; }
+
     }
 }

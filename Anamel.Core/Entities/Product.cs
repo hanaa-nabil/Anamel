@@ -8,8 +8,10 @@ using System.Threading.Tasks;
 
 namespace Anamel.Core.Entities
 {
+   
     public class Product : BaseEntity
     {
+        private static readonly Random _random = new Random();
         public int Id { get; set; }
 
         [Required]
@@ -31,5 +33,8 @@ namespace Anamel.Core.Entities
         public string ImageUrl { get; set; }
 
         public bool IsActive { get; set; } = true;
+
+        [Range(1, 5)]
+        public int Rate { get; set; } = _random.Next(3, 6); 
     }
 }

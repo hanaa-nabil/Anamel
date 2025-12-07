@@ -9,6 +9,7 @@ namespace Anamel.Core.DTOs.Product
 {
     public class UpdateProductDto
     {
+        private static readonly Random _random = new Random();
         [Required]
         [StringLength(200)]
         public string Name { get; set; }
@@ -26,5 +27,8 @@ namespace Anamel.Core.DTOs.Product
         public int CategoryId { get; set; }
 
         public string ImageUrl { get; set; }
+
+        [Range(1, 5)]
+        public int Rate { get; set; } = _random.Next(3, 6);
     }
 }
